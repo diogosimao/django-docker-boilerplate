@@ -1,0 +1,22 @@
+dbdata:
+  image: postgres
+  command: "true"
+db:
+  extends:
+    file: common.yml
+    service: db_base
+  volumes_from:
+    - dbdata
+django:
+  extends:
+    file: common.yml
+    service: django_base
+  ports:
+    - "8000:8000"
+  volumes:
+    - "./:/src"
+  environment:
+    DJANGO_SETTINGS_MODULE: your_app.settings
+    DATABASE_URL: ${DATABASE_URL}
+  links:
+    - db
